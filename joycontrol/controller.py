@@ -28,4 +28,4 @@ class Controller(enum.Enum):
         elif arg == 'PRO_CONTROLLER':
             return Controller.PRO_CONTROLLER
         else:
-            raise ValueError(f'Unknown controller "{arg}".')
+            raise ValueError('Unknown controller "{arg}".')

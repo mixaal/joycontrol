@@ -161,13 +161,13 @@ class ButtonState:
 
     def set_button(self, button, pushed=True):
         if button not in self._available_buttons:
-            raise ValueError(f'Given button "{button}" is not available to {self.controller.device_name()}.')
+            raise ValueError('Given button "{button}" is not available to {self.controller.device_name()}.')
         getattr(self, button)(pushed=pushed)
 
     def get_button(self, button):
         if button not in self._available_buttons:
-            raise ValueError(f'Given button "{button}" is not available to {self.controller.device_name()}.')
-        return getattr(self, f'{button}_is_set')()
+            raise ValueError('Given button "{button}" is not available to {self.controller.device_name()}.')
+        return getattr(self, '{button}_is_set')()
 
     def get_available_buttons(self):
         """
@@ -248,9 +248,9 @@ class _StickCalibration:
         self.v_max_below_center = v_max_below_center
 
     def __str__(self):
-        return f'h_center:{self.h_center} v_center:{self.v_center} h_max_above_center:{self.h_max_above_center} ' \
-               f'v_max_above_center:{self.v_max_above_center} h_max_below_center:{self.h_max_below_center} ' \
-               f'v_max_below_center:{self.v_max_below_center}'
+        return 'h_center:{self.h_center} v_center:{self.v_center} h_max_above_center:{self.h_max_above_center} ' \
+               'v_max_above_center:{self.v_max_above_center} h_max_below_center:{self.h_max_below_center} ' \
+               'v_max_below_center:{self.v_max_below_center}'
 
 
 class LeftStickCalibration(_StickCalibration):
@@ -285,7 +285,7 @@ class StickState:
     def __init__(self, h=0, v=0, calibration: _StickCalibration = None):
         for val in (h, v):
             if not 0 <= val < 0x1000:
-                raise ValueError(f'Stick values must be in [0,{0x1000})')
+                raise ValueError('Stick values must be in [0,{0x1000})')
 
         self._h_stick = h
         self._v_stick = v
@@ -294,7 +294,7 @@ class StickState:
 
     def set_h(self, value):
         if not 0 <= value < 0x1000:
-            raise ValueError(f'Stick values must be in [0,{0x1000})')
+            raise ValueError('Stick values must be in [0,{0x1000})')
         self._h_stick = value
 
     def get_h(self):
@@ -302,7 +302,7 @@ class StickState:
 
     def set_v(self, value):
         if not 0 <= value < 0x1000:
-            raise ValueError(f'Stick values must be in [0,{0x1000})')
+            raise ValueError('Stick values must be in [0,{0x1000})')
         self._v_stick = value
 
     def get_v(self):

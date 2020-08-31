@@ -3,6 +3,7 @@ import logging
 import shlex
 
 from aioconsole import ainput
+from queue import Queue
 
 from joycontrol.controller_state import button_push, ControllerState
 from joycontrol.transport import NotConnectedError
@@ -44,7 +45,7 @@ class CLI:
 
     def add_command(self, name, command):
         if name in self.commands:
-            raise ValueError(f'Command {name} already registered.')
+            raise ValueError('Command {name} already registered.')
         self.commands[name] = command
 
     async def cmd_help(self):
@@ -72,9 +73,9 @@ class CLI:
                 if cmd == 'exit':
                     return
 
-                if hasattr(self, f'cmd_{cmd}'):
+                if hasattr(self, 'cmd_{cmd}'):
                     try:
-                        result = await getattr(self, f'cmd_{cmd}')(*args)
+                        result = await getattr(self, 'cmd_{cmd}')(*args)
                         if result:
                             print(result)
                     except Exception as e:
@@ -98,9 +99,10 @@ class CLI:
 
 
 class ControllerCLI(CLI):
-    def __init__(self, controller_state: ControllerState):
+    def __init__(self, controller_state: ControllerState, queue: Queue):
         super().__init__()
         self.controller_state = controller_state
+        self.queue = queue
 
     async def cmd_help(self):
         print('Button commands:')
@@ -122,24 +124,24 @@ class ControllerCLI(CLI):
             stick.set_right()
         elif direction in ('h', 'horizontal'):
             if value is None:
-                raise ValueError(f'Missing value')
+                raise ValueError('Missing value')
             try:
                 val = int(value)
             except ValueError:
-                raise ValueError(f'Unexpected stick value "{value}"')
+                raise ValueError('Unexpected stick value "{value}"')
             stick.set_h(val)
         elif direction in ('v', 'vertical'):
             if value is None:
-                raise ValueError(f'Missing value')
+                raise ValueError('Missing value')
             try:
                 val = int(value)
             except ValueError:
-                raise ValueError(f'Unexpected stick value "{value}"')
+                raise ValueError('Unexpected stick value "{value}"')
             stick.set_v(val)
         else:
-            raise ValueError(f'Unexpected argument "{direction}"')
+            raise ValueError('Unexpected argument "{direction}"')
 
-        return f'{stick.__class__.__name__} was set to ({stick.get_h()}, {stick.get_v()}).'
+        return '{stick.__class__.__name__} was set to ({stick.get_h()}, {stick.get_v()}).'
 
     async def cmd_stick(self, side, direction, value=None):
         """
@@ -160,9 +162,18 @@ class ControllerCLI(CLI):
 
     async def run(self):
         while True:
-            user_input = await ainput(prompt='cmd >> ')
+            #user_input = await ainput(prompt='cmd >> ')
+            user_input = None
+
+            try:
+                user_input = self.queue.get(block=False)
+            except:
+                pass
+
             if not user_input:
                 continue
+
+            #print(user_input)
 
             buttons_to_push = []
 
@@ -174,9 +185,9 @@ class ControllerCLI(CLI):
 
                 available_buttons = self.controller_state.button_state.get_available_buttons()
 
-                if hasattr(self, f'cmd_{cmd}'):
+                if hasattr(self, 'cmd_{cmd}'):
                     try:
-                        result = await getattr(self, f'cmd_{cmd}')(*args)
+                        result = await getattr(self, 'cmd_{cmd}')(*args)
                         if result:
                             print(result)
                     except Exception as e:

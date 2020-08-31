@@ -72,11 +72,11 @@ async def run_system_command(cmd):
 
     stdout, stderr = await proc.communicate()
 
-    logger.debug(f'[{cmd!r} exited with {proc.returncode}]')
+    logger.debug('[{cmd!r} exited with {proc.returncode}]')
     if stdout:
-        logger.debug(f'[stdout]\n{stdout.decode()}')
+        logger.debug('[stdout]\n{stdout.decode()}')
     if stderr:
-        logger.debug(f'[stderr]\n{stderr.decode()}')
+        logger.debug('[stderr]\n{stderr.decode()}')
 
     return proc.returncode, stdout, stderr
 

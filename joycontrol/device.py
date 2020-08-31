@@ -30,7 +30,7 @@ class HidDevice:
                 self.properties = dbus.Interface(self.adapter, 'org.freedesktop.DBus.Properties')
                 break
         else:
-            raise ValueError(f'Adapter {device_id} not found.')
+            raise ValueError('Adapter {device_id} not found.')
 
     def get_address(self) -> str:
         """
@@ -58,15 +58,15 @@ class HidDevice:
         Sets Bluetooth device class. Requires hciconfig system command.
         :param cls: default 0x002508 (Gamepad/joystick device class)
         """
-        logger.info(f'setting device class to {cls}...')
-        await utils.run_system_command(f'hciconfig {self._adapter_name} class {cls}')
+        logger.info('setting device class to {cls}...')
+        await utils.run_system_command('hciconfig {self._adapter_name} class {cls}')
 
     async def set_name(self, name: str):
         """
         Set Bluetooth device name.
         :param name: to set.
         """
-        logger.info(f'setting device name to {name}...')
+        logger.info('setting device name to {name}...')
         self.properties.Set(self.adapter.dbus_interface, 'Alias', name)
 
     @staticmethod

@@ -170,9 +170,9 @@ class ControllerProtocol(BaseProtocol):
                             # reply_send = await self._reply_to_ir_nfc_mcu(report)
                             await self._reply_to_ir_nfc_mcu(report)
                         else:
-                            logger.warning(f'Report unknown output report "{output_report_id}" - IGNORE')
+                            logger.warning('Report unknown output report "{output_report_id}" - IGNORE')
                     except ValueError as v_err:
-                        logger.warning(f'Report parsing error "{v_err}" - IGNORE')
+                        logger.warning('Report parsing error "{v_err}" - IGNORE')
                     except NotImplementedError as err:
                         logger.warning(err)
 
@@ -221,7 +221,7 @@ class ControllerProtocol(BaseProtocol):
         try:
             report = OutputReport(list(data))
         except ValueError as v_err:
-            logger.warning(f'Report parsing error "{v_err}" - IGNORE')
+            logger.warning('Report parsing error "{v_err}" - IGNORE')
             return
 
         try:
@@ -235,7 +235,7 @@ class ControllerProtocol(BaseProtocol):
         # elif output_report_id == OutputReportID.RUMBLE_ONLY:
         #    pass
         else:
-            logger.warning(f'Output report {output_report_id} not implemented - ignoring')
+            logger.warning('Output report {output_report_id} not implemented - ignoring')
 
     async def _reply_to_ir_nfc_mcu(self, report):
         """
@@ -277,9 +277,9 @@ class ControllerProtocol(BaseProtocol):
             elif sub_command_data[0] == 0x06:
                 self._mcu.set_action(Action.READ_TAG)
             else:
-                logging.info(f'Unknown sub_command_data arg {sub_command_data}')
+                logging.info('Unknown sub_command_data arg {sub_command_data}')
         else:
-            logging.info(f'Unknown MCU sub command {sub_command}')
+            logging.info('Unknown MCU sub command {sub_command}')
 
     async def _reply_to_sub_command(self, report):
         # classify sub command
@@ -292,7 +292,7 @@ class ControllerProtocol(BaseProtocol):
         if sub_command is None:
             raise ValueError('Received output report does not contain a sub command')
 
-        logging.info(f'received output report - Sub command {sub_command}')
+        logging.info('received output report - Sub command {sub_command}')
 
         sub_command_data = report.get_sub_command_data()
         assert sub_command_data is not None
@@ -329,10 +329,10 @@ class ControllerProtocol(BaseProtocol):
             elif sub_command == SubCommand.SET_PLAYER_LIGHTS:
                 await self._command_set_player_lights(sub_command_data)
             else:
-                logger.warning(f'Sub command 0x{sub_command.value:02x} not implemented - ignoring')
+                logger.warning('Sub command 0x{sub_command.value:02x} not implemented - ignoring')
                 return False
         except NotImplementedError as err:
-            logger.error(f'Failed to answer {sub_command} - {err}')
+            logger.error('Failed to answer {sub_command} - {err}')
             return False
         return True
 
@@ -391,13 +391,13 @@ class ControllerProtocol(BaseProtocol):
 
     async def _command_set_input_report_mode(self, sub_command_data):
         if self._input_report_mode == sub_command_data[0]:
-            logger.warning(f'Already in input report mode {sub_command_data[0]} - ignoring request')
+            logger.warning('Already in input report mode {sub_command_data[0]} - ignoring request')
 
         # Start input report reader
         if sub_command_data[0] in (0x30, 0x31):
             new_reader = asyncio.ensure_future(self.input_report_mode_full())
         else:
-            logger.error(f'input report mode {sub_command_data[0]} not implemented - ignoring request')
+            logger.error('input report mode {sub_command_data[0]} not implemented - ignoring request')
             return
 
         # Replace the currently running reader with the input report mode sender,
@@ -409,7 +409,7 @@ class ControllerProtocol(BaseProtocol):
         async def set_reader():
             await self.transport.set_reader(new_reader)
 
-            logger.info(f'Setting input report mode to {hex(sub_command_data[0])}...')
+            logger.info('Setting input report mode to {hex(sub_command_data[0])}...')
             self._input_report_mode = sub_command_data[0]
 
             self.transport.resume_reading()
@@ -491,9 +491,9 @@ class ControllerProtocol(BaseProtocol):
             elif sub_command_data[2] == 4:
                 self._mcu.set_state(McuState.NFC)
             else:
-                logger.info(f"unknown mcu state {sub_command_data[2]}")
+                logger.info("unknown mcu state {sub_command_data[2]}")
         else:
-            logger.info(f"unknown mcu config command {sub_command_data}")
+            logger.info("unknown mcu config command {sub_command_data}")
 
         await self.write(input_report)
 
@@ -514,8 +514,8 @@ class ControllerProtocol(BaseProtocol):
             input_report.reply_to_subcommand_id(SubCommand.SET_NFC_IR_MCU_STATE.value)
             self._mcu.set_state(McuState.STAND_BY)
         else:
-            raise NotImplementedError(f'Argument {sub_command_data[0]} of {SubCommand.SET_NFC_IR_MCU_STATE} '
-                                      f'not implemented.')
+            raise NotImplementedError('Argument {sub_command_data[0]} of {SubCommand.SET_NFC_IR_MCU_STATE} '
+                                      'not implemented.')
 
         await self.write(input_report)
 

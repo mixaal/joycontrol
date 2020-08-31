@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 
+import threading
 import argparse
 import asyncio
 import logging
 import os
+
+from flask import Flask, request
+from flask_restful import Resource, Api
+
+from queue import Queue
 
 from aioconsole import ainput
 
@@ -16,6 +22,65 @@ from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
 
 logger = logging.getLogger(__name__)
+
+
+loop = asyncio.get_event_loop()
+queue = Queue()
+
+class JoyConRestfull(object):
+    def __init__(self):
+        self.app = Flask(__name__)
+        self.api = Api(self.app)
+        self.api.add_resource(PressA, '/pro/a')
+        self.api.add_resource(PressB, '/pro/b')
+        self.api.add_resource(PressX, '/pro/x')
+        self.api.add_resource(PressY, '/pro/y')
+        self.api.add_resource(PressUp, '/pro/up')
+        self.api.add_resource(PressDown, '/pro/down')
+        self.api.add_resource(PressLeft, '/pro/left')
+        self.api.add_resource(PressRight, '/pro/right')
+
+    def run(self):
+        self.app.run()
+
+class PressA(Resource):
+    def post(self):
+        queue.put('press a')
+
+
+class PressB(Resource):
+    def post(self):
+        queue.put('press b')
+
+
+class PressX(Resource):
+    def post(self):
+        queue.put('press x')
+
+
+class PressY(Resource):
+    def post(self):
+        queue.put('press y')
+
+
+class PressLeft(Resource):
+    def post(self):
+        queue.put('press left')
+
+
+class PressRight(Resource):
+    def post(self):
+        queue.put('press right')
+
+
+class PressUp(Resource):
+    def post(self):
+        queue.put('press up')
+
+
+class PressDown(Resource):
+    def post(self):
+        queue.put('press down')
 
 """Emulates Switch controller. Opens joycontrol.command_line_interface to send button commands and more.
 
@@ -195,6 +260,26 @@ def _register_commands_with_controller_state(controller_state, cli):
 
     cli.add_command(mash.__name__, mash)
 
+    async def press(*args):
+        """
+        press - Press and release specified buttons
+
+        Usage:
+            press <button>
+
+        Example:
+            press a b
+        """
+        if not args:
+            raise ValueError('"press" command requires a button!')
+
+        await hold(*args)
+        await asyncio.sleep(0.3)
+        await release(*args)
+
+    cli.add_command(press.__name__, press)
+
+
     # Hold a button command
     async def hold(*args):
         """
@@ -287,8 +372,13 @@ async def _main(args):
 
         controller_state = protocol.get_controller_state()
 
+        joycon_server = JoyConRestfull()
+
+        th = threading.Thread(target=joycon_server.run)
+        th.start()
+
         # Create command line interface and add some extra commands
-        cli = ControllerCLI(controller_state)
+        cli = ControllerCLI(controller_state, queue)
         _register_commands_with_controller_state(controller_state, cli)
         cli.add_command('amiibo', ControllerCLI.deprecated('Command was removed - use "nfc" instead!'))
 
@@ -296,6 +386,8 @@ async def _main(args):
         if args.nfc is not None:
             await cli.commands['nfc'](args.nfc)
 
+        #asyncio.ensure_future(cli.run())
+        #asyncio.ensure_future(app.run(port='5002'))
         # run the cli
         try:
             await cli.run()
@@ -323,7 +415,6 @@ if __name__ == '__main__':
     parser.add_argument('--nfc', type=str, default=None)
     args = parser.parse_args()
 
-    loop = asyncio.get_event_loop()
     loop.run_until_complete(
         _main(args)
     )

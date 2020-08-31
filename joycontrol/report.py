@@ -132,7 +132,7 @@ class InputReport:
         try:
             return SubCommand(self.data[15])
         except ValueError:
-            raise NotImplementedError(f'Sub command id {hex(self.data[11])} not implemented')
+            raise NotImplementedError('Sub command id {hex(self.data[11])} not implemented')
 
     def sub_0x02_device_info(self, mac, fm_version=(0x04, 0x00), controller=Controller.JOYCON_L):
         """
@@ -160,9 +160,9 @@ class InputReport:
 
     def sub_0x10_spi_flash_read(self, offset, size, data):
         if len(data) != size:
-            raise ValueError(f'Length of data {len(data)} does not match size {size}')
+            raise ValueError('Length of data {len(data)} does not match size {size}')
         if size > 0x1D:
-            raise ValueError(f'Size can not exceed {0x1D}')
+            raise ValueError('Size can not exceed {0x1D}')
 
         self.reply_to_subcommand_id(0x10)
 
@@ -179,7 +179,7 @@ class InputReport:
         Set sub command data for 0x04 reply. Arguments are in ms and must be divisible by 10.
         """
         if any(ms > 10*0xffff for ms in (L_ms, R_ms, ZL_ms, ZR_ms, SL_ms, SR_ms, HOME_ms)):
-            raise ValueError(f'Values can not exceed {10*0xffff} ms.')
+            raise ValueError('Values can not exceed {10*0xffff} ms.')
 
         def set(offset, ms):
             # reply data offset
@@ -208,13 +208,13 @@ class InputReport:
             return bytes(self.data[:51])
 
     def __str__(self):
-        _id = f'Input {self.get_input_report_id():x}'
+        _id = 'Input {self.get_input_report_id():x}'
         _info = ''
         if self.get_input_report_id() == 0x21:
             _info = self.get_reply_to_subcommand_id()
-        _bytes = ' '.join(f'{byte:x}' for byte in bytes(self))
+        _bytes = ' '.join('{byte:x}' for byte in bytes(self))
 
-        return f'{_id} {_info}\n{_bytes}'
+        return '{_id} {_info}\n{_bytes}'
 
 
 class SubCommand(Enum):
@@ -249,7 +249,7 @@ class OutputReport:
         try:
             return OutputReportID(self.data[1])
         except ValueError:
-            raise NotImplementedError(f'Output report id {hex(self.data[1])} not implemented')
+            raise NotImplementedError('Output report id {hex(self.data[1])} not implemented')
 
     def set_output_report_id(self, _id):
         if isinstance(_id, OutputReportID):
@@ -275,7 +275,7 @@ class OutputReport:
         try:
             return SubCommand(self.data[11])
         except ValueError:
-            raise NotImplementedError(f'Sub command id {hex(self.data[11])} not implemented')
+            raise NotImplementedError('Sub command id {hex(self.data[11])} not implemented')
 
     def set_sub_command(self, _id):
         if isinstance(_id, SubCommand):
@@ -301,9 +301,9 @@ class OutputReport:
         :param size: size of data to be read in [0x00, 0x1D]
         """
         if size > 0x1D:
-            raise ValueError(f'Size read can not exceed {0x1D}')
+            raise ValueError('Size read can not exceed {0x1D}')
         if offset+size > 0x80000:
-            raise ValueError(f'Given address range exceeds max address {0x80000-1}')
+            raise ValueError('Given address range exceeds max address {0x80000-1}')
 
         self.set_output_report_id(OutputReportID.SUB_COMMAND)
         self.set_sub_command(SubCommand.SPI_FLASH_READ)
@@ -319,10 +319,10 @@ class OutputReport:
         return bytes(self.data)
 
     def __str__(self):
-        _id = f'Output {self.get_output_report_id()}'
+        _id = 'Output {self.get_output_report_id()}'
         _info = ''
         if self.get_output_report_id() == OutputReportID.SUB_COMMAND:
             _info = self.get_sub_command()
-        _bytes = ' '.join(f'{byte:x}' for byte in bytes(self))
+        _bytes = ' '.join('{byte:x}' for byte in bytes(self))
 
-        return f'{_id} {_info}\n{_bytes}'
+        return '{_id} {_info}\n{_bytes}'
