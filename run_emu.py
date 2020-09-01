@@ -31,14 +31,14 @@ class JoyConRestfull(object):
     def __init__(self):
         self.app = Flask(__name__)
         self.api = Api(self.app)
-        self.api.add_resource(PressA, '/pro/a')
-        self.api.add_resource(PressB, '/pro/b')
-        self.api.add_resource(PressX, '/pro/x')
-        self.api.add_resource(PressY, '/pro/y')
-        self.api.add_resource(PressUp, '/pro/up')
-        self.api.add_resource(PressDown, '/pro/down')
-        self.api.add_resource(PressLeft, '/pro/left')
-        self.api.add_resource(PressRight, '/pro/right')
+        self.api.add_resource(PressA, '/press/a')
+        self.api.add_resource(PressB, '/press/b')
+        self.api.add_resource(PressX, '/press/x')
+        self.api.add_resource(PressY, '/press/y')
+        self.api.add_resource(PressUp, '/press/up')
+        self.api.add_resource(PressDown, '/press/down')
+        self.api.add_resource(PressLeft, '/press/left')
+        self.api.add_resource(PressRight, '/press/right')
 
     def run(self):
         self.app.run()
