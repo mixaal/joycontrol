@@ -39,9 +39,248 @@ class JoyConRestfull(object):
         self.api.add_resource(PressDown, '/press/down')
         self.api.add_resource(PressLeft, '/press/left')
         self.api.add_resource(PressRight, '/press/right')
+        self.api.add_resource(PressR, '/press/r')
+        self.api.add_resource(PressZR, '/press/zr')
+        self.api.add_resource(PressL, '/press/l')
+        self.api.add_resource(PressZL, '/press/zl')
+        self.api.add_resource(PressHome, '/press/home')
+        self.api.add_resource(PressCapture, '/press/capture')
+        self.api.add_resource(PressMinus, '/press/minus')
+        self.api.add_resource(PressPlus, '/press/plus')
+
+        self.api.add_resource(HoldA, '/hold/a')
+        self.api.add_resource(HoldB, '/hold/b')
+        self.api.add_resource(HoldX, '/hold/x')
+        self.api.add_resource(HoldY, '/hold/y')
+        self.api.add_resource(HoldUp, '/hold/up')
+        self.api.add_resource(HoldDown, '/hold/down')
+        self.api.add_resource(HoldLeft, '/hold/left')
+        self.api.add_resource(HoldRight, '/hold/right')
+        self.api.add_resource(HoldR, '/hold/r')
+        self.api.add_resource(HoldZR, '/hold/zr')
+        self.api.add_resource(HoldL, '/hold/l')
+        self.api.add_resource(HoldZL, '/hold/zl')
+
+        self.api.add_resource(ReleaseA, '/release/a')
+        self.api.add_resource(ReleaseB, '/release/b')
+        self.api.add_resource(ReleaseX, '/release/x')
+        self.api.add_resource(ReleaseY, '/release/y')
+        self.api.add_resource(ReleaseUp, '/release/up')
+        self.api.add_resource(ReleaseDown, '/release/down')
+        self.api.add_resource(ReleaseLeft, '/release/left')
+        self.api.add_resource(ReleaseRight, '/release/right')
+        self.api.add_resource(ReleaseR, '/release/r')
+        self.api.add_resource(ReleaseZR, '/release/zr')
+        self.api.add_resource(ReleaseL, '/release/l')
+        self.api.add_resource(ReleaseZL, '/release/zl')
+
+
+        self.api.add_resource(RStickRight, '/stick/r/right')
+        self.api.add_resource(RStickLeft, '/stick/r/left')
+        self.api.add_resource(RStickDown, '/stick/r/down')
+        self.api.add_resource(RStickUp, '/stick/r/up')
+        self.api.add_resource(RStickCenter, '/stick/r/center')
+
+
+        self.api.add_resource(LStickRight, '/stick/l/right')
+        self.api.add_resource(LStickLeft, '/stick/l/left')
+        self.api.add_resource(LStickDown, '/stick/l/down')
+        self.api.add_resource(LStickUp, '/stick/l/up')
+        self.api.add_resource(LStickCenter, '/stick/l/center')
 
     def run(self):
         self.app.run()
+
+
+class RStickRight(Resource):
+    def post(self):
+        queue.put('stick r right')
+
+class RStickLeft(Resource):
+    def post(self):
+        queue.put('stick r left')
+
+class RStickUp(Resource):
+    def post(self):
+        queue.put('stick r up')
+
+class RStickDown(Resource):
+    def post(self):
+        queue.put('stick r down')
+
+class RStickCenter(Resource):
+    def post(self):
+        queue.put('stick r center')
+
+class LStickRight(Resource):
+    def post(self):
+        queue.put('stick l right')
+
+class LStickLeft(Resource):
+    def post(self):
+        queue.put('stick l left')
+
+class LStickUp(Resource):
+    def post(self):
+        queue.put('stick l up')
+
+class LStickDown(Resource):
+    def post(self):
+        queue.put('stick l down')
+
+class LStickCenter(Resource):
+    def post(self):
+        queue.put('stick l center')
+
+
+
+class ReleaseR(Resource):
+    def post(self):
+        queue.put('press r')
+
+class ReleaseL(Resource):
+    def post(self):
+        queue.put('release l')
+
+class ReleaseZR(Resource):
+    def post(self):
+        queue.put('release zr')
+
+class ReleaseZL(Resource):
+    def post(self):
+        queue.put('release zl')
+
+
+class ReleaseA(Resource):
+    def post(self):
+        queue.put('release a')
+
+
+class ReleaseB(Resource):
+    def post(self):
+        queue.put('release b')
+
+
+class ReleaseX(Resource):
+    def post(self):
+        queue.put('release x')
+
+
+class ReleaseY(Resource):
+    def post(self):
+        queue.put('release y')
+
+
+class ReleaseLeft(Resource):
+    def post(self):
+        queue.put('release left')
+
+
+class ReleaseRight(Resource):
+    def post(self):
+        queue.put('release right')
+
+
+class ReleaseUp(Resource):
+    def post(self):
+        queue.put('release up')
+
+
+class ReleaseDown(Resource):
+    def post(self):
+        queue.put('release down')
+
+
+
+class HoldR(Resource):
+    def post(self):
+        queue.put('press r')
+
+class HoldL(Resource):
+    def post(self):
+        queue.put('hold l')
+
+class HoldZR(Resource):
+    def post(self):
+        queue.put('hold zr')
+
+class HoldZL(Resource):
+    def post(self):
+        queue.put('hold zl')
+
+
+class HoldA(Resource):
+    def post(self):
+        queue.put('hold a')
+
+
+class HoldB(Resource):
+    def post(self):
+        queue.put('hold b')
+
+
+class HoldX(Resource):
+    def post(self):
+        queue.put('hold x')
+
+
+class HoldY(Resource):
+    def post(self):
+        queue.put('hold y')
+
+
+class HoldLeft(Resource):
+    def post(self):
+        queue.put('hold left')
+
+
+class HoldRight(Resource):
+    def post(self):
+        queue.put('hold right')
+
+
+class HoldUp(Resource):
+    def post(self):
+        queue.put('hold up')
+
+
+class HoldDown(Resource):
+    def post(self):
+        queue.put('hold down')
+
+class PressMinus(Resource):
+    def post(self):
+        queue.put('press minus')
+
+
+class PressPlus(Resource):
+    def post(self):
+        queue.put('press plus')
+
+class PressHome(Resource):
+    def post(self):
+        queue.put('press home')
+
+class PressCapture(Resource):
+    def post(self):
+        queue.put('press capture')
+
+class PressR(Resource):
+    def post(self):
+        queue.put('press r')
+
+class PressL(Resource):
+    def post(self):
+        queue.put('press l')
+
+class PressZR(Resource):
+    def post(self):
+        queue.put('press zr')
+
+class PressZL(Resource):
+    def post(self):
+        queue.put('press zl')
+
 
 class PressA(Resource):
     def post(self):
@@ -244,6 +483,16 @@ def _register_commands_with_controller_state(controller_state, cli):
 
     cli.add_command(test_buttons.__name__, test_buttons)
 
+
+    async def stick(*args):
+        if not len(args) == 2:
+            raise ValueError('"stick" command requires a side and direction as arguments!')
+
+        side, direction = args
+        await cli.cmd_stick(side, direction)
+
+    cli.add_command(stick.__name__, stick)
+
     # Mash a button command
     async def mash(*args):
         """
@@ -274,7 +523,7 @@ def _register_commands_with_controller_state(controller_state, cli):
             raise ValueError('"press" command requires a button!')
 
         await hold(*args)
-        await asyncio.sleep(0.3)
+        await asyncio.sleep(0.1)
         await release(*args)
 
     cli.add_command(press.__name__, press)
