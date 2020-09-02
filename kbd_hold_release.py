@@ -25,22 +25,22 @@ class Application(tk.Frame):
 
     @staticmethod
     def key_press(event):
-        print (str(event)+ " key press")
+        print (str(event.keysym)+ " key press")
         sym = event.keysym
         char = event.char
         if sym == 'Home':
             Application.api.press_home()
-        elif sym == 'minus':
+        elif sym == 'minus' or sym == 'KP_Subtract':
             Application.api.press_minus()
-        elif sym == 'plus':
+        elif sym == 'plus' or sym == 'KP_Add':
             Application.api.press_plus()
-        elif sym == 'a':
+        elif sym == 'a' or sym == 'A':
             Application.api.lstick_left()
         elif sym == 'w':
             Application.api.lstick_up()
         elif sym == 's':
             Application.api.lstick_down()
-        elif sym == 'd':
+        elif sym == 'd' or sym == 'D':
             Application.api.lstick_right()
         elif sym == 'Left':
             Application.api.rstick_left()
@@ -50,35 +50,39 @@ class Application(tk.Frame):
             Application.api.rstick_up()
         elif sym == 'Down':
             Application.api.rstick_down()
-        elif sym == 'x':
+        elif sym == 'x' or sym == 'X':
             Application.api.hold_x()
-        elif sym == 'b':
+        elif sym == 'b' or sym == 'B':
             Application.api.hold_b()
         elif sym == 'Return':
             Application.api.hold_a()
         elif sym == 'space':
             Application.api.hold_y()
-        elif sym == '8':
+        elif sym == '8' or sym == 'KP_8':
             Application.api.hold_up()
-        elif sym == '2':
+        elif sym == '2' or sym == 'KP_2':
             Application.api.hold_down()
-        elif sym == '4':
+        elif sym == '4' or sym == 'KP_4':
             Application.api.hold_left()
-        elif sym == '6':
+        elif sym == '6' or sym == 'KP_6':
             Application.api.hold_right()
+        elif sym == 'W':
+            Application.api.hold_zr()
+        elif sym == 'S':
+            Application.api.hold_zl()
 
     @staticmethod
     def key_release(event):
-        print (str(event)+ " key release")
+        print (str(event.keysym)+ " key release")
         sym = event.keysym
         char = event.char
-        if sym == 'a':
+        if sym == 'a' or sym == 'A':
             Application.api.lstick_center()
         elif sym == 'w':
             Application.api.lstick_center()
         elif sym == 's':
             Application.api.lstick_center()
-        elif sym == 'd':
+        elif sym == 'd' or sym == 'D':
             Application.api.lstick_center()
         elif sym == 'Left':
             Application.api.rstick_center()
@@ -88,22 +92,26 @@ class Application(tk.Frame):
             Application.api.rstick_center()
         elif sym == 'Down':
             Application.api.rstick_center()
-        elif sym == 'x':
+        elif sym == 'x' or sym == 'X':
             Application.api.release_x()
-        elif sym == 'b':
+        elif sym == 'b' or sym == 'B':
             Application.api.release_b()
         elif sym == 'Return':
             Application.api.release_a()
         elif sym == 'space':
             Application.api.release_y()
-        elif sym == '8':
+        elif sym == '8' or sym == 'KP_8' or sym == 'KP_Up':
             Application.api.release_up()
-        elif sym == '2':
+        elif sym == '2' or sym == 'KP_2' or sym == 'KP_Down':
             Application.api.release_down()
-        elif sym == '4':
+        elif sym == '4' or sym == 'KP_4' or sym == 'KP_Left':
             Application.api.release_left()
-        elif sym == '6':
+        elif sym == '6' or sym == 'KP_6' or sym == 'KP_Right':
             Application.api.release_right()
+        elif sym == 'W':
+            Application.api.release_zr()
+        elif sym == 'S':
+            Application.api.release_zl()
 
 
     @staticmethod

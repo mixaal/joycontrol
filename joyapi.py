@@ -68,6 +68,20 @@ class JoyApi(object):
    def release_right(self):
        self._post('/release/right')
 
+   def release_zr(self):
+       self._post('/release/zr')
+
+   def release_zl(self):
+       self._post('/release/zl')
+
+   def release_r(self):
+       self._post('/release/r')
+
+   def release_l(self):
+       self._post('/release/l')
+
+
+
    def hold_a(self):
        self._post('/hold/a')
 
@@ -92,6 +106,17 @@ class JoyApi(object):
    def hold_right(self):
        self._post('/hold/right')
 
+   def hold_zr(self):
+       self._post('/hold/zr')
+
+   def hold_zl(self):
+       self._post('/hold/zl')
+
+   def hold_r(self):
+       self._post('/hold/r')
+
+   def hold_l(self):
+       self._post('/hold/l')
 
    def press_a(self):
        self._post('/press/a')
