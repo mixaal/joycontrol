@@ -13,10 +13,13 @@ class Application(tk.Frame):
 
         self.master.bind('<KeyPress>', self.key_press)
         self.master.bind('<KeyRelease>', self.key_release)
-        self.master.bind('<Button-1>', self.left_button)
-        self.master.bind('<Button-2>', self.right_button)
-        self.master.bind('<B1-Motion>', self.left_button_with_motion)
-        self.master.bind('<B2-Motion>', self.right_button_with_motion)
+        self.master.bind('<Button-1>', self.left_button_press)
+        self.master.bind('<ButtonRelease-1>', self.left_button_release)
+        self.master.bind('<Button-2>', self.right_button_press)
+        self.master.bind('<ButtonRelease-2>', self.right_button_release)
+#        self.master.bind('<B1-Motion>', self.left_button_with_motion)
+#        self.master.bind('<B2-Motion>', self.right_button_with_motion)
+        self.master.bind('<Motion>', self.motion)
 
         self.main_frame = tk.Frame()
         self.main_frame.focus_set()
@@ -117,14 +120,6 @@ class Application(tk.Frame):
     @staticmethod
     def right_button_with_motion(event):
         print (str(event)+ " right button motion")
-        if Application.ox is not None:
-            dx = event.x - Application.ox
-            print("DX="+str(dx))
-        if Application.oy is not None:
-            dy = event.y - Application.oy
-            print("DY="+str(dy))
-        Application.ox = event.x
-        Application.oy = event.y
 
     @staticmethod
     def left_button_with_motion(event):
@@ -138,17 +133,48 @@ class Application(tk.Frame):
         Application.ox = event.x
         Application.oy = event.y
 
-
-
     @staticmethod
-    def right_button(event):
+    def right_button_press(event):
         print (str(event)+ " right button pressed")
-        Application.api.press_b()
+        Application.api.hold_b()
 
     @staticmethod
-    def left_button(event):
+    def right_button_release(event):
+        print (str(event)+ " right button released")
+        Application.api.release_b()
+
+    @staticmethod
+    def left_button_press(event):
         print (str(event)+ " left button pressed")
-        Application.api.press_a()
+        Application.api.hold_a()
+
+    @staticmethod
+    def left_button_release(event):
+        print (str(event)+ " left button released")
+        Application.api.release_a()
+
+
+    @staticmethod
+    def motion(event):
+        x, y = event.x, event.y
+        dx = 0
+        dy = 0
+        if Application.ox is not None:
+            dx = x - Application.ox
+            print("DX="+str(dx))
+        if Application.oy is not None:
+            dy = y - Application.oy
+            print("DY="+str(dy))
+        if x>0 or x<0:
+          x /= 10.0 
+          Application.api.lstick_horiz(x)
+        if y>0 or y<0:
+          y /= 10.0 
+          Application.api.lstick_vert(y)
+        Application.ox = event.x
+        Application.oy = event.y
+        #print('{}, {}'.format(x, y))
+
 
 root = tk.Tk()
 app = Application(root)

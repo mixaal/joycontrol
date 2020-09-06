@@ -12,6 +12,13 @@ class JoyApi(object):
        except Exception as e:
            print(str(e))
 
+   def lstick_vert(self, value):
+       self._post('/stick/l/v/'+str(value))
+
+   def lstick_horiz(self, value):
+       self._post('/stick/l/h/'+str(value))
+
+
    def rstick_left(self):
        self._post('/stick/r/left')
 
@@ -41,8 +48,6 @@ class JoyApi(object):
 
    def lstick_center(self):
        self._post('/stick/l/center')
-
-
 
    def release_a(self):
        self._post('/release/a')

@@ -87,6 +87,8 @@ class JoyConRestfull(object):
         self.api.add_resource(LStickDown, '/stick/l/down')
         self.api.add_resource(LStickUp, '/stick/l/up')
         self.api.add_resource(LStickCenter, '/stick/l/center')
+        self.api.add_resource(LStickHValue, '/stick/l/h/<value>')
+        self.api.add_resource(LStickVValue, '/stick/l/V/<value>')
 
     def run(self):
         self.app.run()
@@ -132,7 +134,13 @@ class LStickCenter(Resource):
     def post(self):
         queue.put('stick l center')
 
+class LStickHValue(Resource):
+    def post(self, value):
+        print("LStick Horiz Value:"+str(value))
 
+class LStickVValue(Resource):
+    def post(self, value):
+        print("LStick Vert Value:"+str(value))
 
 class ReleaseR(Resource):
     def post(self):
