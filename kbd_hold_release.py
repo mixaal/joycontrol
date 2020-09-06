@@ -1,10 +1,27 @@
 import tkinter as tk
+import threading
+import time
 from joyapi import JoyApi
 
 class Application(tk.Frame):
     ox = None
     oy = None
     api = JoyApi()
+    mouseMotion=False
+    mouseMotionTime = time.time()
+
+    def mouse_motion_monitor(self):
+        while True:
+            #print("Mouse motion: "+str(Application.mouseMotion))
+            #print("Mouse motion time: "+str(Application.mouseMotionTime))
+            now = time.time()
+            if now - Application.mouseMotionTime > 1 and Application.mouseMotion:
+                Application.mouseMotion = False
+                print("Mouse motion stopped")
+                Application.api.lstick_horiz(2000)
+                Application.api.lstick_vert(2000)
+            time.sleep(1)
+
 
     def __init__(self, master):
         tk.Frame.__init__(self, master)
@@ -156,6 +173,8 @@ class Application(tk.Frame):
 
     @staticmethod
     def motion(event):
+        Application.mouseMotion = True
+        Application.mouseMotionTime = time.time()
         x, y = event.x, event.y
         dx = 0
         dy = 0
@@ -165,17 +184,27 @@ class Application(tk.Frame):
         if Application.oy is not None:
             dy = y - Application.oy
             print("DY="+str(dy))
-        if x>0 or x<0:
-          x /= 10.0 
-          Application.api.lstick_horiz(x)
-        if y>0 or y<0:
-          y /= 10.0 
-          Application.api.lstick_vert(y)
-        Application.ox = event.x
-        Application.oy = event.y
-        #print('{}, {}'.format(x, y))
+        if dx>5:
+          Application.api.lstick_horiz(4000)
+        if dx<-5:
+          Application.api.lstick_horiz(0)
+        if dx>=-5 and dx<5:
+          Application.api.lstick_horiz(2000)
+        if dy>5:
+          Application.api.lstick_vert(0)
+        if dy<-5:
+          Application.api.lstick_vert(4000)
+        if dy>=-5 and dy<5:
+          Application.api.lstick_vert(2000)
+        Application.ox = x
+        Application.oy = y
+        print('Mouse at {}, {}'.format(x, y))
+
+
 
 
 root = tk.Tk()
 app = Application(root)
+th = threading.Thread(target=app.mouse_motion_monitor)
+th.start()
 app.mainloop()

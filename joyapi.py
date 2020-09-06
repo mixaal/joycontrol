@@ -13,10 +13,10 @@ class JoyApi(object):
            print(str(e))
 
    def lstick_vert(self, value):
-       self._post('/stick/l/v/'+str(value))
+       self._post('/stick/l/v?value='+str(value))
 
    def lstick_horiz(self, value):
-       self._post('/stick/l/h/'+str(value))
+       self._post('/stick/l/h?value='+str(value))
 
 
    def rstick_left(self):

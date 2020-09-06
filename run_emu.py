@@ -87,8 +87,8 @@ class JoyConRestfull(object):
         self.api.add_resource(LStickDown, '/stick/l/down')
         self.api.add_resource(LStickUp, '/stick/l/up')
         self.api.add_resource(LStickCenter, '/stick/l/center')
-        self.api.add_resource(LStickHValue, '/stick/l/h/<value>')
-        self.api.add_resource(LStickVValue, '/stick/l/V/<value>')
+        self.api.add_resource(LStickHValue, '/stick/l/h')
+        self.api.add_resource(LStickVValue, '/stick/l/v')
 
     def run(self):
         self.app.run()
@@ -135,12 +135,18 @@ class LStickCenter(Resource):
         queue.put('stick l center')
 
 class LStickHValue(Resource):
-    def post(self, value):
-        print("LStick Horiz Value:"+str(value))
+    def post(self):
+        v = request.args.get('value')
+        if v is not None:
+            #print("LStick Horiz Value:"+v)
+            queue.put('lvalue h '+v)
 
 class LStickVValue(Resource):
-    def post(self, value):
-        print("LStick Vert Value:"+str(value))
+    def post(self):
+        v = request.args.get('value')
+        if v is not None:
+            #print("LStick Vert Value:"+v)
+            queue.put('lvalue v '+v)
 
 class ReleaseR(Resource):
     def post(self):
@@ -500,6 +506,17 @@ def _register_commands_with_controller_state(controller_state, cli):
         await cli.cmd_stick(side, direction)
 
     cli.add_command(stick.__name__, stick)
+
+    async def lvalue(*args):
+        if not len(args) == 2:
+            raise ValueError('"lstick" command requires a direction and value as arguments!')
+
+        direction, value = args
+        print('lvalue '+direction+' '+value)
+        await cli.cmd_stick('l', direction, value)
+
+    cli.add_command(lvalue.__name__, lvalue)
+
 
     # Mash a button command
     async def mash(*args):
