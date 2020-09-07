@@ -1,11 +1,18 @@
 from evdev import InputDevice, categorize, ecodes
 
 from joyapi import JoyApi
+import glob
+
+gamepads = glob.glob("/dev/input/by-id/*gamepad-event*")
+if len(gamepads)<1:
+    raise "No gamepad found"
+gamepad_dev = gamepads[0]
+print("Using " + gamepad_dev)
 
 api = JoyApi()
 
 #cree un objet gamepad | creates object gamepad
-gamepad = InputDevice('/dev/input/event3')
+gamepad = InputDevice(gamepad_dev)
 
 #affiche la liste des device connectes | prints out device info at start
 print(gamepad)
