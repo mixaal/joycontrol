@@ -11,6 +11,8 @@ class Application(tk.Frame):
     mouseMotionTime = time.time()
     JoyConHoriz = 0
     JoyConVert = 0
+    SwapLeftRightSticks = True
+    Swap_ZRZL_With_UPDOWN = False
 
     def mouse_motion_monitor(self):
         while True:
@@ -46,6 +48,13 @@ class Application(tk.Frame):
         self.pack()
 
     @staticmethod
+    def swap_zr_zl_with_up_down():
+        if Application.Swap_ZRZL_With_UPDOWN:
+            Application.Swap_ZRZL_With_UPDOWN = False
+        else:
+            Application.Swap_ZRZL_With_UPDOWN = True
+
+    @staticmethod
     def handle_left_stick():
         if Application.JoyConHoriz < 0:
             Application.api.lstick_horiz(0)
@@ -60,6 +69,129 @@ class Application(tk.Frame):
         if Application.JoyConVert == 0:
             Application.api.lstick_vert(2000)
 
+    @staticmethod
+    def is_stick_left(whichone, sym):
+        if whichone == 'r' or whichone == 'Right' :
+            if sym == 'Left':
+                return True
+            else:
+                return False
+        else:
+            if sym == 'a' or sym == 'A':
+                return True
+            else:
+                return False
+
+    @staticmethod
+    def is_stick_right(whichone, sym):
+        if whichone == 'r' or whichone == 'Right' :
+            if sym == 'Right':
+                return True
+            else:
+                return False
+        else:
+            if sym == 'd' or sym == 'D':
+                return True
+            else:
+                return False
+
+    @staticmethod
+    def is_stick_up(whichone, sym):
+        if whichone == 'r' or whichone == 'Right' :
+            if sym == 'Up' and not Application.Swap_ZRZL_With_UPDOWN:
+                return True
+            else:
+                return False
+        else:
+            if sym == 'w':
+                return True
+            else:
+                return False
+
+    @staticmethod
+    def is_stick_down(whichone, sym):
+        if whichone == 'r' or whichone == 'Right' :
+            if sym == 'Down' and not Application.Swap_ZRZL_With_UPDOWN:
+                return True
+            else:
+                return False
+        else:
+            if sym == 's':
+                return True
+            else:
+                return False
+
+    @staticmethod
+    def is_lstick_left(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_left('r', sym)
+        else:
+            return Application.is_stick_left('l', sym)
+
+    @staticmethod
+    def is_lstick_right(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_right('r', sym)
+        else:
+            return Application.is_stick_right('l', sym)
+
+    @staticmethod
+    def is_lstick_up(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_up('r', sym)
+        else:
+            return Application.is_stick_up('l', sym)
+
+    @staticmethod
+    def is_lstick_down(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_down('r', sym)
+        else:
+            return Application.is_stick_down('l', sym)
+
+    @staticmethod
+    def is_rstick_left(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_left('l', sym)
+        else:
+            return Application.is_stick_left('r', sym)
+
+    @staticmethod
+    def is_rstick_right(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_right('l', sym)
+        else:
+            return Application.is_stick_right('r', sym)
+
+    @staticmethod
+    def is_rstick_up(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_up('l', sym)
+        else:
+            return Application.is_stick_up('r', sym)
+
+    @staticmethod
+    def is_rstick_down(sym):
+        if Application.SwapLeftRightSticks:
+            return Application.is_stick_down('l', sym)
+        else:
+            return Application.is_stick_down('r', sym)
+
+    @staticmethod
+    def is_zr(sym):
+        if Application.SwapLeftRightSticks and Application.Swap_ZRZL_With_UPDOWN:
+            return sym == 'Up'
+        else:
+            return sym == 'W'
+
+    @staticmethod
+    def is_zl(sym):
+        if Application.SwapLeftRightSticks and Application.Swap_ZRZL_With_UPDOWN:
+            return sym == 'Down'
+        else:
+            return sym == 'S'
+
+
     
     @staticmethod
     def key_press(event):
@@ -72,21 +204,21 @@ class Application(tk.Frame):
             Application.api.press_minus()
         elif sym == 'plus' or sym == 'KP_Add':
             Application.api.press_plus()
-        elif sym == 'a' or sym == 'A':
+        elif Application.is_lstick_left(sym):
             Application.JoyConHoriz = -1
-        elif sym == 'w':
+        elif Application.is_lstick_up(sym):
             Application.JoyConVert = 1
-        elif sym == 's':
+        elif Application.is_lstick_down(sym):
             Application.JoyConVert = -1
-        elif sym == 'd' or sym == 'D':
+        elif Application.is_lstick_right(sym):
             Application.JoyConHoriz = 1
-        elif sym == 'Left':
+        elif Application.is_rstick_left(sym):
             Application.api.rstick_left()
-        elif sym == 'Right':
+        elif Application.is_rstick_right(sym):
             Application.api.rstick_right()
-        elif sym == 'Up':
+        elif Application.is_rstick_up(sym):
             Application.api.rstick_up()
-        elif sym == 'Down':
+        elif Application.is_rstick_down(sym):
             Application.api.rstick_down()
         elif sym == 'x' or sym == 'X':
             Application.api.hold_x()
@@ -104,10 +236,14 @@ class Application(tk.Frame):
             Application.api.hold_left()
         elif sym == '6' or sym == 'KP_6':
             Application.api.hold_right()
-        elif sym == 'W':
+        elif Application.is_zr(sym):
             Application.api.hold_zr()
-        elif sym == 'S':
+        elif Application.is_zl(sym):
             Application.api.hold_zl()
+        elif sym == 'KP_Enter':
+            Application.swap_zr_zl_with_up_down()
+            #print(Application.Swap_ZRZL_With_UPDOWN)
+
         Application.handle_left_stick()
 
     @staticmethod
@@ -115,21 +251,21 @@ class Application(tk.Frame):
         print (str(event.keysym)+ " key release")
         sym = event.keysym
         char = event.char
-        if sym == 'a' or sym == 'A':
+        if Application.is_lstick_left(sym):
             Application.JoyConHoriz = 0
-        elif sym == 'w':
+        elif Application.is_lstick_up(sym):
             Application.JoyConVert = 0
-        elif sym == 's':
+        elif Application.is_lstick_down(sym):
             Application.JoyConVert = 0
-        elif sym == 'd' or sym == 'D':
+        elif Application.is_lstick_right(sym):
             Application.JoyConHoriz = 0
-        elif sym == 'Left':
+        elif Application.is_rstick_left(sym):
             Application.api.rstick_center()
-        elif sym == 'Right':
+        elif Application.is_rstick_right(sym):
             Application.api.rstick_center()
-        elif sym == 'Up':
+        elif Application.is_rstick_up(sym):
             Application.api.rstick_center()
-        elif sym == 'Down':
+        elif Application.is_rstick_down(sym):
             Application.api.rstick_center()
         elif sym == 'x' or sym == 'X':
             Application.api.release_x()
@@ -147,9 +283,9 @@ class Application(tk.Frame):
             Application.api.release_left()
         elif sym == '6' or sym == 'KP_6' or sym == 'KP_Right':
             Application.api.release_right()
-        elif sym == 'W':
+        elif Application.is_zr(sym):
             Application.api.release_zr()
-        elif sym == 'S':
+        elif Application.is_zl(sym):
             Application.api.release_zl()
         Application.handle_left_stick()
 
