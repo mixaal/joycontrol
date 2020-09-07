@@ -38,7 +38,7 @@ class Application(tk.Frame):
         self.master.bind('<ButtonRelease-2>', self.right_button_release)
 #        self.master.bind('<B1-Motion>', self.left_button_with_motion)
 #        self.master.bind('<B2-Motion>', self.right_button_with_motion)
-        self.master.bind('<Motion>', self.motion)
+#        self.master.bind('<Motion>', self.motion)
 
         self.main_frame = tk.Frame()
         self.main_frame.focus_set()
