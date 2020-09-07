@@ -9,6 +9,8 @@ class Application(tk.Frame):
     api = JoyApi()
     mouseMotion=False
     mouseMotionTime = time.time()
+    JoyConHoriz = 0
+    JoyConVert = 0
 
     def mouse_motion_monitor(self):
         while True:
@@ -44,6 +46,22 @@ class Application(tk.Frame):
         self.pack()
 
     @staticmethod
+    def handle_left_stick():
+        if Application.JoyConHoriz < 0:
+            Application.api.lstick_horiz(0)
+        if Application.JoyConHoriz > 0:
+            Application.api.lstick_horiz(4000)
+        if Application.JoyConHoriz == 0:
+            Application.api.lstick_horiz(2000)
+        if Application.JoyConVert < 0:
+            Application.api.lstick_vert(0)
+        if Application.JoyConVert > 0:
+            Application.api.lstick_vert(4000)
+        if Application.JoyConVert == 0:
+            Application.api.lstick_vert(2000)
+
+    
+    @staticmethod
     def key_press(event):
         print (str(event.keysym)+ " key press")
         sym = event.keysym
@@ -55,13 +73,13 @@ class Application(tk.Frame):
         elif sym == 'plus' or sym == 'KP_Add':
             Application.api.press_plus()
         elif sym == 'a' or sym == 'A':
-            Application.api.lstick_left()
+            Application.JoyConHoriz = -1
         elif sym == 'w':
-            Application.api.lstick_up()
+            Application.JoyConVert = 1
         elif sym == 's':
-            Application.api.lstick_down()
+            Application.JoyConVert = -1
         elif sym == 'd' or sym == 'D':
-            Application.api.lstick_right()
+            Application.JoyConHoriz = 1
         elif sym == 'Left':
             Application.api.rstick_left()
         elif sym == 'Right':
@@ -90,6 +108,7 @@ class Application(tk.Frame):
             Application.api.hold_zr()
         elif sym == 'S':
             Application.api.hold_zl()
+        Application.handle_left_stick()
 
     @staticmethod
     def key_release(event):
@@ -97,13 +116,13 @@ class Application(tk.Frame):
         sym = event.keysym
         char = event.char
         if sym == 'a' or sym == 'A':
-            Application.api.lstick_center()
+            Application.JoyConHoriz = 0
         elif sym == 'w':
-            Application.api.lstick_center()
+            Application.JoyConVert = 0
         elif sym == 's':
-            Application.api.lstick_center()
+            Application.JoyConVert = 0
         elif sym == 'd' or sym == 'D':
-            Application.api.lstick_center()
+            Application.JoyConHoriz = 0
         elif sym == 'Left':
             Application.api.rstick_center()
         elif sym == 'Right':
@@ -132,6 +151,7 @@ class Application(tk.Frame):
             Application.api.release_zr()
         elif sym == 'S':
             Application.api.release_zl()
+        Application.handle_left_stick()
 
 
     @staticmethod
@@ -205,6 +225,7 @@ class Application(tk.Frame):
 
 root = tk.Tk()
 app = Application(root)
-th = threading.Thread(target=app.mouse_motion_monitor)
-th.start()
+#mouse motion not working properly so far
+#th = threading.Thread(target=app.mouse_motion_monitor)
+#th.start()
 app.mainloop()
