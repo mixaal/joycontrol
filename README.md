@@ -6,7 +6,10 @@ Forked from the https://github.com/mart1nro/joycontrol project. Added the follow
 * `joyapi.py` client for the REST backend
 * supports keyboard controller, SNES like controller and RPI PS3-like controller
 
+
 Tested on Raspberry PI 3B+ and Raspberry PI Zero WH
+
+![Joycon Schema](joycon_schema.png)
 
 ## Quick Start
 
