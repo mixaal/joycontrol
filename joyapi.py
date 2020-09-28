@@ -18,6 +18,11 @@ class JoyApi(object):
    def lstick_horiz(self, value):
        self._post('/stick/l/h?value='+str(value))
 
+   def rstick_vert(self, value):
+       self._post('/stick/r/v?value='+str(value))
+
+   def rstick_horiz(self, value):
+       self._post('/stick/r/h?value='+str(value))
 
    def rstick_left(self):
        self._post('/stick/r/left')

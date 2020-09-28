@@ -89,6 +89,8 @@ class JoyConRestfull(object):
         self.api.add_resource(LStickCenter, '/stick/l/center')
         self.api.add_resource(LStickHValue, '/stick/l/h')
         self.api.add_resource(LStickVValue, '/stick/l/v')
+        self.api.add_resource(RStickHValue, '/stick/r/h')
+        self.api.add_resource(RStickVValue, '/stick/r/v')
 
     def run(self):
         self.app.run()
@@ -140,6 +142,22 @@ class LStickHValue(Resource):
         if v is not None:
             #print("LStick Horiz Value:"+v)
             queue.put('lvalue h '+v)
+
+class RStickHValue(Resource):
+    def post(self):
+        v = request.args.get('value')
+        if v is not None:
+            #print("LStick Horiz Value:"+v)
+            queue.put('rvalue h '+v)
+
+class RStickVValue(Resource):
+    def post(self):
+        v = request.args.get('value')
+        if v is not None:
+            #print("LStick Vert Value:"+v)
+            queue.put('rvalue v '+v)
+
+
 
 class LStickVValue(Resource):
     def post(self):
@@ -506,6 +524,18 @@ def _register_commands_with_controller_state(controller_state, cli):
         await cli.cmd_stick(side, direction)
 
     cli.add_command(stick.__name__, stick)
+
+    async def rvalue(*args):
+        if not len(args) == 2:
+            raise ValueError('"rvalue" command requires a direction and value as arguments!')
+
+        direction, value = args
+        print('rvalue '+direction+' '+value)
+        await cli.cmd_stick('r', direction, value)
+
+    cli.add_command(rvalue.__name__, rvalue)
+
+
 
     async def lvalue(*args):
         if not len(args) == 2:
