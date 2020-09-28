@@ -64,4 +64,4 @@ Call "help" to see a list of available commands.
 
 [console_pairing_session](https://github.com/timmeh87/switchnotes/blob/master/console_pairing_session)
 
-[RPI Gamepad](rpi_ps3.jpg)
+![RPI Gamepad](rpi_ps3.jpg)
