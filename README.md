@@ -63,3 +63,5 @@ Call "help" to see a list of available commands.
 [Nintendo_Switch_Reverse_Engineering](https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering)
 
 [console_pairing_session](https://github.com/timmeh87/switchnotes/blob/master/console_pairing_session)
+
+[RPI Gamepad](rpi_ps3.jpg)
