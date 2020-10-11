@@ -1,6 +1,8 @@
+sudo apt install -y python3-pip
 sudo pip3 install flask
 sudo pip3 install flask_restful
 sudo pip3 install aioconsole
 sudo pip3 install hid
 sudo apt install -y libhidapi-dev libhidapi-hidraw0 libhidapi-libusb0 python3-hidapi python3-hid
 sudo pip3 install crc8
+sudo pip3 evdev
