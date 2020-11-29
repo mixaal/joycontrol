@@ -3,8 +3,8 @@ from evdev import InputDevice, categorize, ecodes
 from joyapi import JoyApi
 import glob
 
-#gamepads = glob.glob("/dev/input/by-id/*gamepad-event*")
-gamepads = glob.glob("/dev/input/by-id/usb-ShanWan_PC_PS3_Android-event-joystick")
+gamepads = glob.glob("/dev/input/by-id/*gamepad-event*")
+#gamepads = glob.glob("/dev/input/by-id/usb-ShanWan_PC_PS3_Android-event-joystick")
 if len(gamepads)<1:
     raise "No gamepad found"
 gamepad_dev = gamepads[0]

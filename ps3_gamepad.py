@@ -53,9 +53,9 @@ for event in gamepad.read_loop():
                 #print("ZR")
                 api.hold_zr()
             if event.code == 312:
-                print("-")
+                api.press_minus()
             if event.code == 313:
-                print("+")
+                api.press_plus()
         elif event.value == 0:
             if event.code == 304:
                 #print("X")
@@ -93,15 +93,19 @@ for event in gamepad.read_loop():
         if absevent.event.code == ecodes.ABS_HAT0X:
             if absevent.event.value<0:
                 print("left down")
+                api.press_left()
             elif absevent.event.value>0:
                 print("right down")
+                api.press_right()
             else:
                 print("left and right up")
         elif absevent.event.code == ecodes.ABS_HAT0Y:
             if absevent.event.value<0:
                 print("up down")
+                api.press_up()
             elif absevent.event.value>0:
                 print("down down")
+                api.press_down()
             else:
                 print("up and down up")
         elif absevent.event.code == ecodes.ABS_X:
